@@ -7,6 +7,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { LogoutMenuItem } from "@/components/dashboard/logout-menu-item"
+
 import {
   SidebarProvider,
   SidebarInset,
@@ -79,14 +81,7 @@ export default function DashboardLayout({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem
-                  className="text-red-600 focus:text-red-600"
-                  onSelect={() => {
-                    window.location.href = "/login"
-                  }}
-                >
-                  Sair
-                </DropdownMenuItem>
+                <LogoutMenuItem />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

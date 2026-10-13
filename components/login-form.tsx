@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import axios from "axios"
 import { cn } from "@/lib/utils"
-import { apiFetch } from "@/lib/api"
+import { api } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -48,18 +49,23 @@ export function LoginForm({
     setIsLoading(true)
 
     try {
-      const result = await apiFetch<LoginResponse>("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
+      const response = await api.post<LoginResponse>("/auth/login", {
+        email,
+        password,
       })
 
-      sessionStorage.setItem("auth_token", result.token)
+      const token = response.data.token
 
-      const user = await apiFetch<AuthUser>("/auth/me", {
+      sessionStorage.setItem("auth_token", token)
+
+      const userResponse = await api.get<AuthUser>("/auth/me", {
         headers: {
-          Authorization: `Bearer ${result.token}`,
+          Authorization: `Bearer ${token}`, 
         },
+        
       })
+
+      const user = userResponse.data
 
       sessionStorage.setItem("auth_user", JSON.stringify(user))
 
@@ -77,11 +83,19 @@ export function LoginForm({
       sessionStorage.removeItem("auth_token")
       sessionStorage.removeItem("auth_user")
 
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Não foi possível entrar. Tente novamente.",
-      )
+      if (axios.isAxiosError(err)) {
+        setError(
+          err.response?.data?.message ??
+            err.response?.data?.error ??
+            "Não foi possível entrar. Verifique suas credenciais e tente novamente.",
+        )
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Não foi possível entrar. Tente novamente.",
+        )
+      }
     } finally {
       setIsLoading(false)
     }
