@@ -9,7 +9,7 @@ type MockUser = {
   permissions: Permission[]
 }
 
-export const currentRole: UserRole = "DEPPI"
+export const currentRole: UserRole = "ALUNO"
 
 export const mockUsers: Record<UserRole, MockUser> = {
   ADMIN: {

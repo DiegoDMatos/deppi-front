@@ -11,17 +11,17 @@ import {
 } from "recharts"
 
 const enrollmentStatusData = [
-  { status: "Pendente", value: 412, color: "#C8752B" },
-  { status: "Deferida", value: 1480, color: "#348D59" },
-  { status: "Indeferida", value: 298, color: "#C83D3D" },
-  { status: "Cancelada", value: 127, color: "#808080" },
+  { status: "Pendente", value: 0, color: "#C8752B" },
+  { status: "Deferida", value: 0, color: "#348D59" },
+  { status: "Indeferida", value: 0, color: "#C83D3D" },
+  { status: "Cancelada", value: 0, color: "#808080" },
 ]
 
 const courseStatusData = [
-  { status: "Em análise", value: 6, color: "#B95A0A" },
-  { status: "Em andamento", value: 17, color: "#16803D" },
-  { status: "Concluído", value: 12, color: "#2455E8" },
-  { status: "Fechado", value: 3, color: "#A0A0A0" },
+  { status: "Em análise", value: 0, color: "#B95A0A" },
+  { status: "Em andamento", value: 0, color: "#16803D" },
+  { status: "Concluído", value: 0, color: "#2455E8" },
+  { status: "Fechado", value: 0, color: "#A0A0A0" },
 ]
 
 const totalCourses = courseStatusData.reduce(
