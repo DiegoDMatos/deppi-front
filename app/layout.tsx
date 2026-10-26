@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk,  Inter_Tight, JetBrains_Mono} from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/auth-context"
 
 const spaceGrotest = Space_Grotesk({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${spaceGrotest.variable} ${interTight.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AuthProvider>{children}</AuthProvider>
+        </body>
     </html>
   );
 }

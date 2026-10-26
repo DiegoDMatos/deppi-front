@@ -1,19 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 
 type AuthGuardProps = {
   children: React.ReactNode
   allowedRoles?: string[]
-}
-
-type AuthUser = {
-  id: string
-  name: string
-  email: string
-  roles: string[]
-  permissions: string[]
 }
 
 export function AuthGuard({
@@ -21,50 +14,54 @@ export function AuthGuard({
   allowedRoles,
 }: AuthGuardProps) {
   const router = useRouter()
-  const [isAuthorized, setIsAuthorized] = useState(false)
+  const { user, loading, error, refreshUser } = useAuth()
+
+  const hasPermission =
+    !!user &&
+    (!allowedRoles ||
+      allowedRoles.some((role) =>
+        user.roles.includes(role)
+      ))
 
   useEffect(() => {
-    const token = sessionStorage.getItem("auth_token")
-    const storedUser = sessionStorage.getItem("auth_user")
+    if (loading || error) return
 
-    if (!token || !storedUser) {
+    if (!user) {
       router.replace("/login")
       return
     }
-
-    let user: AuthUser
-
-    try {
-      user = JSON.parse(storedUser)
-
-      if (!Array.isArray(user.roles)) {
-        throw new Error("Dados de usuário inválidos")
-      }
-    } catch {
-      sessionStorage.removeItem("auth_token")
-      sessionStorage.removeItem("auth_user")
-      router.replace("/login")
-      return
-    }
-
-    const hasPermission =
-      !allowedRoles ||
-      allowedRoles.some((role) => user.roles.includes(role))
 
     if (!hasPermission) {
       router.replace("/403")
-      return
     }
+  }, [user, loading, error, hasPermission, router])
 
-    setIsAuthorized(true)
-  }, [router, allowedRoles])
-
-  if (!isAuthorized) {
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         Verificando acesso...
       </div>
     )
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <p>Não foi possível verificar sua sessão.</p>
+
+        <button
+          type="button"
+          onClick={() => void refreshUser()}
+          className="rounded-md bg-[#15803D] px-4 py-2 text-white"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    )
+  }
+
+  if (!hasPermission) {
+    return null
   }
 
   return <>{children}</>

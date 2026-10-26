@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { LogoutMenuItem } from "@/components/dashboard/logout-menu-item"
 
 import {
   SidebarProvider,
@@ -79,7 +78,6 @@ export default function DashboardLayout({
 
                   <DropdownMenuSeparator />
 
-                  <LogoutMenuItem />
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

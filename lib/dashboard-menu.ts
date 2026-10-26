@@ -59,7 +59,7 @@ export const dashboardMenus = {
 
 export function getDashboardMenu(
   role: UserRole,
-  permissions: Permission[],
+  permissions: string[],
 ) {
   const menu = dashboardMenus[role] as {
     label: string

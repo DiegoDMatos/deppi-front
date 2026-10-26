@@ -1,11 +1,13 @@
+
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { LogOut } from "lucide-react"
 
 import { getDashboardMenu } from "@/lib/dashboard-menu"
-import { currentRole, mockUsers } from "@/lib/mock-user"
+import type { UserRole } from "@/lib/dashboard-menu"
+import { useAuth } from "@/contexts/auth-context"
 
 import {
   Sidebar,
@@ -19,20 +21,41 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-function logout(){
-  sessionStorage.removeItem("auth_token");
-  window.location.href = "/login";
-}
+const validRoles: UserRole[] = [
+  "ADMIN",
+  "DEPPI",
+  "PROFESSOR",
+  "ALUNO",
+]
 
 export function DashboardSidebar() {
   const pathname = usePathname()
-  const user = mockUsers[currentRole]
-  const menuItems = getDashboardMenu(user.role, user.permissions)
+  const router = useRouter()
+  const { user, logout } = useAuth()
+
+  const role = validRoles.find(
+    (role) =>
+      pathname === `/${role.toLowerCase()}` ||
+      pathname.startsWith(`/${role.toLowerCase()}/`)
+  )
+
+  const hasRole = role && user?.roles.includes(role)
+
+  const menuItems = role && user && user.roles.includes(role)
+  ? getDashboardMenu(role, user.permissions)
+  : []
+
+  function handleLogout() {
+    logout()
+    router.replace("/login")
+  }
 
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-4 py-5">
-        <p className="text-xl font-bold text-[#14532D]">DEPPI</p>
+        <p className="text-xl font-bold text-[#14532D]">
+          DEPPI
+        </p>
         <p className="text-xs text-muted-foreground">
           Gestão de extensão
         </p>
@@ -40,11 +63,14 @@ export function DashboardSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu principal</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            Menu principal
+          </SidebarGroupLabel>
 
           <SidebarMenu>
             {menuItems.map((item) => {
               const Icon = item.icon
+
               const isActive =
                 pathname === item.href ||
                 pathname.startsWith(`${item.href}/`)
@@ -73,9 +99,7 @@ export function DashboardSidebar() {
       <SidebarFooter className="border-t p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={ logout }
-            >
+            <SidebarMenuButton onClick={handleLogout}>
               <LogOut />
               <span>Sair</span>
             </SidebarMenuButton>
