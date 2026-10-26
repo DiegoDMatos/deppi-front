@@ -19,6 +19,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+function logout(){
+  sessionStorage.removeItem("auth_token");
+  window.location.href = "/login";
+}
+
 export function DashboardSidebar() {
   const pathname = usePathname()
   const user = mockUsers[currentRole]
@@ -69,9 +74,7 @@ export function DashboardSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={() => {
-                window.location.href = "/login"
-              }}
+              onClick={ logout }
             >
               <LogOut />
               <span>Sair</span>
