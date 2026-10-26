@@ -18,9 +18,9 @@ const enrollmentStatusData = [
 ]
 
 const courseStatusData = [
-  { status: "Em análise", value: 0, color: "#B95A0A" },
-  { status: "Em andamento", value: 0, color: "#16803D" },
-  { status: "Concluído", value: 0, color: "#2455E8" },
+  { status: "Em análise", value: 5, color: "#B95A0A" },
+  { status: "Em andamento", value: 10, color: "#16803D" },
+  { status: "Concluído", value: 9, color: "#2455E8" },
   { status: "Fechado", value: 0, color: "#A0A0A0" },
 ]
 
