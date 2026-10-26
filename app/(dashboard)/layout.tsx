@@ -12,12 +12,10 @@ import { LogoutMenuItem } from "@/components/dashboard/logout-menu-item"
 import {
   SidebarProvider,
   SidebarInset,
-  SidebarTrigger,
 } from "@/components/ui/sidebar"
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import { AuthGuard } from "@/components/auth-guard"
-import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { currentRole, mockUsers } from "@/lib/mock-user"
 
@@ -35,8 +33,6 @@ export default function DashboardLayout({
 
         <SidebarInset className="min-w-0 bg-[#F8FAF8]">
           <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-white px-4 lg:px-6">
-            <SidebarTrigger />
-            <Separator orientation="vertical" className="h-6" />
 
             <div className="flex-1">
               <p className="text-sm font-semibold text-[#14532D]">
