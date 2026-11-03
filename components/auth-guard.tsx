@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { getToken, deleteToken } from "@/lib/session"
 
 type AuthGuardProps = {
   children: React.ReactNode
@@ -24,39 +25,43 @@ export function AuthGuard({
   const [isAuthorized, setIsAuthorized] = useState(false)
 
   useEffect(() => {
-    const token = sessionStorage.getItem("auth_token")
-    const storedUser = sessionStorage.getItem("auth_user")
+    async function checkAuthorization() {
+      const token = getToken();
+      const storedUser = sessionStorage.getItem("auth_user");
 
-    if (!token || !storedUser) {
-      router.replace("/login")
-      return
-    }
-
-    let user: AuthUser
-
-    try {
-      user = JSON.parse(storedUser)
-
-      if (!Array.isArray(user.roles)) {
-        throw new Error("Dados de usuário inválidos")
+      if (!token || !storedUser) {
+        router.replace("/")
+        return
       }
-    } catch {
-      sessionStorage.removeItem("auth_token")
-      sessionStorage.removeItem("auth_user")
-      router.replace("/login")
-      return
+
+      let user: AuthUser
+
+      try {
+        user = JSON.parse(storedUser)
+
+        if (!Array.isArray(user.roles)) {
+          throw new Error("Dados de usuário inválidos")
+        }
+      } catch {
+        await deleteToken();
+        sessionStorage.removeItem("auth_user")
+        router.replace("/")
+        return
+      }
+
+      const hasPermission =
+        !allowedRoles ||
+        allowedRoles.some((role) => user.roles.includes(role))
+
+      if (!hasPermission) {
+        router.replace("/403")
+        return
+      }
+
+      setIsAuthorized(true)
     }
 
-    const hasPermission =
-      !allowedRoles ||
-      allowedRoles.some((role) => user.roles.includes(role))
-
-    if (!hasPermission) {
-      router.replace("/403")
-      return
-    }
-
-    setIsAuthorized(true)
+    void checkAuthorization()
   }, [router, allowedRoles])
 
   if (!isAuthorized) {

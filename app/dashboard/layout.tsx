@@ -27,7 +27,7 @@ export default function DashboardLayout({
   const user = mockUsers[currentRole]
 
   return (
-    <AuthGuard allowedRoles={["ADMIN"]}>
+    <AuthGuard allowedRoles={["ADMIN", "DEPPI"]}>
       <SidebarProvider>
         <DashboardSidebar />
 

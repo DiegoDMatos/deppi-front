@@ -18,16 +18,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
-function logout(){
-  sessionStorage.removeItem("auth_token");
-  window.location.href = "/login";
-}
+import { useRouter } from "next/navigation"
+import { deleteToken } from "@/lib/session"
 
 export function DashboardSidebar() {
   const pathname = usePathname()
   const user = mockUsers[currentRole]
   const menuItems = getDashboardMenu(user.role, user.permissions)
+  const router = useRouter();
+
+  async function logout(){
+    await deleteToken();
+    router.push("/")
+  }
 
   return (
     <Sidebar>
