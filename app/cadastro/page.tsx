@@ -29,9 +29,7 @@ export default function CadastroPage() {
     },
   })
 
-  function onSubmit(data: CadastroFormData) {
-    console.log(data)
-  }
+  function onSubmit() {}
 
   return (
     <main className="flex min-h-svh items-center justify-center bg-[#F8FAF8] p-6">

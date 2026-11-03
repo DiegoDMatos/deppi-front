@@ -47,7 +47,7 @@ export function DashboardSidebar() {
 
   function handleLogout() {
     logout()
-    router.replace("/login")
+    router.replace("/")
   }
 
   return (

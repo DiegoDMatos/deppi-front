@@ -20,6 +20,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { saveToken, deleteToken } from "@/lib/session"
 
 type LoginResponse = {
   token: string
@@ -54,9 +55,8 @@ export function LoginForm({
         password,
       })
 
-      const token = response.data.token
-
-      sessionStorage.setItem("auth_token", token)
+      const token = response.data.token;
+      await saveToken(token);
 
       const userResponse = await api.get<AuthUser>("/auth/me", {
         headers: {
@@ -65,22 +65,12 @@ export function LoginForm({
         
       })
 
-      const user = userResponse.data
+      const user = userResponse.data;
+      sessionStorage.setItem("auth_user", JSON.stringify(user));
+      router.push("/dashboard");
 
-      sessionStorage.setItem("auth_user", JSON.stringify(user))
-
-      const role = user.roles[0]
-
-      const destination: Record<string, string> = {
-        ADMIN: "/admin",
-        DEPPI: "/deppi",
-        PROFESSOR: "/professor",
-        ALUNO: "/aluno",
-      }
-
-      router.push(destination[role] ?? "/login")
     } catch (err) {
-      sessionStorage.removeItem("auth_token")
+      await deleteToken();
       sessionStorage.removeItem("auth_user")
 
       if (axios.isAxiosError(err)) {
