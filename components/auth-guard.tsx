@@ -27,7 +27,7 @@ export function AuthGuard({
     if (loading || error) return
 
     if (!user) {
-      router.replace("/login")
+      router.replace("/")
       return
     }
 

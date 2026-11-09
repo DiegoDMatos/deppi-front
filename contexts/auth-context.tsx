@@ -41,24 +41,9 @@ export function AuthProvider({
   const [error, setError] = useState(false)
 
   const refreshUser = useCallback(async () => {
-    const token = sessionStorage.getItem("auth_token")
-
-    if (!token) {
-      setUser(null)
-      setError(false)
-      setLoading(false)
-      return
-    }
-
-    setLoading(true)
-    setError(false)
 
     try {
-      const response = await api.get<AuthUser>("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const response = await api.get<AuthUser>("/auth/me");
 
       if (
         !Array.isArray(response.data.roles) ||
@@ -77,7 +62,6 @@ export function AuthProvider({
         axios.isAxiosError(err) &&
         err.response?.status === 401
       ) {
-        sessionStorage.removeItem("auth_token")
         sessionStorage.removeItem("auth_user")
         setUser(null)
       } else {
@@ -94,7 +78,6 @@ export function AuthProvider({
   }, [refreshUser])
 
   const logout = () => {
-    sessionStorage.removeItem("auth_token")
     sessionStorage.removeItem("auth_user")
     setUser(null)
     setError(false)
@@ -116,7 +99,7 @@ export function AuthProvider({
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error(
@@ -124,5 +107,5 @@ export function useAuth() {
     )
   }
 
-  return context
+  return context;
 }

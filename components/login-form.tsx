@@ -20,7 +20,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { saveToken, deleteToken } from "@/lib/session"
 
 type LoginResponse = {
   token: string
@@ -50,27 +49,22 @@ export function LoginForm({
     setIsLoading(true)
 
     try {
-      const response = await api.post<LoginResponse>("/auth/login", {
+      await api.post<LoginResponse>("/auth/login", {
         email,
         password,
       })
 
-      const token = response.data.token;
-      await saveToken(token);
+      const userResponse = await api.get<AuthUser>("/auth/me");
 
-      const userResponse = await api.get<AuthUser>("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-        
-      })
+      if(!userResponse){
+        throw new Error("Erro na rota /auth/me");
+      }
 
       const user = userResponse.data;
       sessionStorage.setItem("auth_user", JSON.stringify(user));
       router.push("/dashboard");
 
     } catch (err) {
-      await deleteToken();
       sessionStorage.removeItem("auth_user")
 
       if (axios.isAxiosError(err)) {

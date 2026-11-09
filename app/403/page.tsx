@@ -46,7 +46,7 @@ export default function ForbiddenPage() {
 
           <Button
             variant="outline"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/")}
           >
             Ir para o login
           </Button>
