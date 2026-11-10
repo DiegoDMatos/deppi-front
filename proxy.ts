@@ -10,6 +10,7 @@ export async function proxy(request: NextRequest){
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+
   if(tokenValue && url === "/"){
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
