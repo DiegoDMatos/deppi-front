@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react"
 import axios from "axios"
-import { api } from "@/lib/api"
+import { deppiApi, nextApi } from "@/lib/api"
 
 export type AuthUser = {
   id: string
@@ -43,7 +43,7 @@ export function AuthProvider({
   const refreshUser = useCallback(async () => {
 
     try {
-      const response = await api.get<AuthUser>("/auth/me");
+      const response = await nextApi.get<AuthUser>("/api/auth/me");
 
       if (
         !Array.isArray(response.data.roles) ||

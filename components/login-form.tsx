@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import { cn } from "@/lib/utils"
-import { api } from "@/lib/api"
+import { nextApi } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -21,11 +21,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-type LoginResponse = {
-  token: string
-}
-
-type AuthUser = {
+export type AuthUser = {
   id: string
   name: string
   email: string
@@ -49,12 +45,10 @@ export function LoginForm({
     setIsLoading(true)
 
     try {
-      await api.post<LoginResponse>("/auth/login", {
-        email,
-        password,
-      })
 
-      const userResponse = await api.get<AuthUser>("/auth/me");
+      const response = await nextApi.post<string>("/api/auth/login", { email, password })
+
+      const userResponse = await nextApi.get<AuthUser>("/api/auth/me");
 
       if(!userResponse){
         throw new Error("Erro na rota /auth/me");
