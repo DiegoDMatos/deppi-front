@@ -4,18 +4,17 @@ import type { NextRequest } from 'next/server'
 export async function proxy(request: NextRequest){
   const token = request.cookies.get("auth_token");
   const tokenValue = token?.value;
+  const url = request.nextUrl.pathname;
 
-  if(!tokenValue){
+  if(!tokenValue && url !== "/"){
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  const url = request.nextUrl.pathname;
-
-  if(url === "/"){
+  if(tokenValue && url === "/"){
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  NextResponse.next();
+  return NextResponse.next();
     
 }
 
