@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import { cn } from "@/lib/utils"
-import { api } from "@/lib/api"
+import { localApi } from "@/lib/localApi"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -21,11 +21,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-type LoginResponse = {
-  token: string
-}
-
-type AuthUser = {
+export type AuthUser = {
   id: string
   name: string
   email: string
@@ -49,38 +45,20 @@ export function LoginForm({
     setIsLoading(true)
 
     try {
-      const response = await api.post<LoginResponse>("/auth/login", {
-        email,
-        password,
-      })
 
-      const token = response.data.token
+      await localApi.post<string>("/api/auth/login", { email, password })
 
-      sessionStorage.setItem("auth_token", token)
+      const userResponse = await localApi.get<AuthUser>("/api/auth/me");
 
-      const userResponse = await api.get<AuthUser>("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-        
-      })
-
-      const user = userResponse.data
-
-      sessionStorage.setItem("auth_user", JSON.stringify(user))
-
-      const role = user.roles[0]
-
-      const destination: Record<string, string> = {
-        ADMIN: "/admin",
-        DEPPI: "/deppi",
-        PROFESSOR: "/professor",
-        ALUNO: "/aluno",
+      if(!userResponse){
+        throw new Error("Erro na rota /auth/me");
       }
 
-      router.push(destination[role] ?? "/login")
+      const user = userResponse.data;
+      sessionStorage.setItem("auth_user", JSON.stringify(user));
+      router.push("/dashboard");
+
     } catch (err) {
-      sessionStorage.removeItem("auth_token")
       sessionStorage.removeItem("auth_user")
 
       if (axios.isAxiosError(err)) {

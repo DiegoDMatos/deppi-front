@@ -1,3 +1,5 @@
+"use client"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,26 +9,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 import {
   SidebarProvider,
   SidebarInset,
 } from "@/components/ui/sidebar"
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { AuthGuard } from "@/components/auth-guard"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { currentRole, mockUsers } from "@/lib/mock-user"
+import { useAuth } from "@/contexts/auth-context"
+
+function getNameInitials(name: string){
+  if(!name) return "IF"
+
+  const initials = name.split(' ').map((n) => n[0].toUpperCase());
+  return initials.length > 1 ? initials[0] + initials[1] : initials[0];
+}
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const user = mockUsers[currentRole]
+
+  const { user, loading } = useAuth()
+
+  if(loading) return (<p>carregando</p>) // to do - tela de loading
+  if(!user) return (<p>erro</p>) // to do - tela de erro genérico
 
   return (
-    <AuthGuard allowedRoles={["ADMIN"]}>
       <SidebarProvider>
         <DashboardSidebar />
 
@@ -45,7 +55,7 @@ export default function DashboardLayout({
                   {user.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {user.description}
+                  {user.roles[0]}
                 </p>
               </div>
 
@@ -56,7 +66,7 @@ export default function DashboardLayout({
                 >
                   <Avatar className="size-10 border border-[#D8E8DA]">
                     <AvatarFallback className="bg-[#EAF4EC] font-semibold text-[#14532D]">
-                      {user.initials}
+                      {getNameInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -88,6 +98,5 @@ export default function DashboardLayout({
           </main>
         </SidebarInset>
       </SidebarProvider>
-    </AuthGuard>
   )
 }

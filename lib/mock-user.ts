@@ -1,4 +1,3 @@
-
 import type { Permission, UserRole } from "@/lib/dashboard-menu"
 
 type MockUser = {
@@ -9,14 +8,7 @@ type MockUser = {
   permissions: Permission[]
 }
 
-function getNameInitials(name: string){
-  if(!name) return "IF"
-
-  const initials = name.split(' ').map((n) => n[0]);
-  return initials.length > 1 ? initials[0] + initials[1] : initials[0];
-}
-
-export const currentRole: UserRole = "DEPPI"
+export const currentRole: UserRole = "ADMIN"
 
 export const mockUsers: Record<UserRole, MockUser> = {
   ADMIN: {
@@ -43,7 +35,7 @@ export const mockUsers: Record<UserRole, MockUser> = {
   DEPPI: {
     name: "Equipe DEPPI",
     description: "Gestão de extensão",
-    initials: getNameInitials("Equipe DEPPI"),
+    initials: "DP",
     role: "DEPPI",
     permissions: [
       "enrollment.approve",

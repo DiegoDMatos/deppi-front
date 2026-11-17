@@ -5,17 +5,19 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
   useCallback,
   type ReactNode,
 } from "react"
 import axios from "axios"
-import { api } from "@/lib/api"
+import { localApi } from "@/lib/localApi"
+import { UserRole } from "@/lib/dashboard-menu"
 
 export type AuthUser = {
   id: string
   name: string
   email: string
-  roles: string[]
+  roles: UserRole[]
   permissions: string[]
 }
 
@@ -23,7 +25,7 @@ type AuthContextType = {
   user: AuthUser | null
   loading: boolean
   error: boolean
-  refreshUser: () => Promise<void>
+  refreshUser: () => Promise<boolean>
   logout: () => void
 }
 
@@ -39,62 +41,64 @@ export function AuthProvider({
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const requestId = useRef(0)
 
-  const refreshUser = useCallback(async () => {
-    const token = sessionStorage.getItem("auth_token")
+  const refreshUser = useCallback(async (): Promise<boolean> => {
+  const currentRequest = ++requestId.current
 
-    if (!token) {
-      setUser(null)
-      setError(false)
-      setLoading(false)
-      return
+  setLoading(true)
+  setError(false)
+
+  try {
+    const response = await localApi.get<AuthUser>("/api/auth/me", {
+      headers: { "Cache-Control": "no-cache" },
+    })
+
+    const authenticatedUser = response.data
+
+    if (
+      typeof authenticatedUser?.id !== "string" ||
+      typeof authenticatedUser?.name !== "string" ||
+      typeof authenticatedUser?.email !== "string" ||
+      !Array.isArray(authenticatedUser.roles) ||
+      !Array.isArray(authenticatedUser.permissions)
+    ) {
+      throw new Error("Resposta inválida da API")
     }
 
-    setLoading(true)
-    setError(false)
+    if (currentRequest !== requestId.current) {
+      return false
+    }
 
-    try {
-      const response = await api.get<AuthUser>("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    setUser(authenticatedUser)
+    return true
+  } catch (err) {
+    if (currentRequest !== requestId.current) {
+      return false
+    }
 
-      if (
-        !Array.isArray(response.data.roles) ||
-        !Array.isArray(response.data.permissions)
-      ) {
-        throw new Error("Resposta inválida da API")
-      }
+    setUser(null)
 
-      setUser(response.data)
-      sessionStorage.setItem(
-        "auth_user",
-        JSON.stringify(response.data)
-      )
-    } catch (err) {
-      if (
-        axios.isAxiosError(err) &&
-        err.response?.status === 401
-      ) {
-        sessionStorage.removeItem("auth_token")
-        sessionStorage.removeItem("auth_user")
-        setUser(null)
-      } else {
-        setError(true)
-        setUser(null)
-      }
-    } finally {
+    if (
+      !axios.isAxiosError(err) ||
+      err.response?.status !== 401
+    ) {
+      setError(true)
+    }
+
+    return false
+  } finally {
+    if (currentRequest === requestId.current) {
       setLoading(false)
     }
-  }, [])
+  }
+}, [])
 
   useEffect(() => {
     void refreshUser()
   }, [refreshUser])
 
   const logout = () => {
-    sessionStorage.removeItem("auth_token")
     sessionStorage.removeItem("auth_user")
     setUser(null)
     setError(false)
@@ -116,7 +120,7 @@ export function AuthProvider({
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error(
@@ -124,5 +128,5 @@ export function useAuth() {
     )
   }
 
-  return context
+  return context;
 }
