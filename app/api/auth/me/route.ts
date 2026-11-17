@@ -1,4 +1,4 @@
-import { deppiApi } from "@/lib/api";
+import { deppiApi } from "@/lib/deppiApi";
 import { AuthUser } from "@/components/login-form";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";

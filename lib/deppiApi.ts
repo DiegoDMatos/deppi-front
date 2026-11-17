@@ -8,9 +8,3 @@ export const deppiApi = axios.create({
   },
 })
 
-export const nextApi = axios.create({
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-})

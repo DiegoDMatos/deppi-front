@@ -1,6 +1,6 @@
 "use server"
 
-import { deppiApi } from "@/lib/api"
+import { deppiApi } from "@/lib/deppiApi"
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request){

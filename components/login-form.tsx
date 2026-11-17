@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import { cn } from "@/lib/utils"
-import { nextApi } from "@/lib/api"
+import { localApi } from "@/lib/localApi"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -46,9 +46,9 @@ export function LoginForm({
 
     try {
 
-      const response = await nextApi.post<string>("/api/auth/login", { email, password })
+      await localApi.post<string>("/api/auth/login", { email, password })
 
-      const userResponse = await nextApi.get<AuthUser>("/api/auth/me");
+      const userResponse = await localApi.get<AuthUser>("/api/auth/me");
 
       if(!userResponse){
         throw new Error("Erro na rota /auth/me");

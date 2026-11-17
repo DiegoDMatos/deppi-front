@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react"
 import axios from "axios"
-import { deppiApi, nextApi } from "@/lib/api"
+import { localApi } from "@/lib/localApi"
 
 export type AuthUser = {
   id: string
@@ -49,7 +49,7 @@ export function AuthProvider({
   setError(false)
 
   try {
-    const response = await nextApi.get<AuthUser>("/api/auth/me", {
+    const response = await localApi.get<AuthUser>("/api/auth/me", {
       headers: { "Cache-Control": "no-cache" },
     })
 
