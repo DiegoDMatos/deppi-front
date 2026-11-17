@@ -11,12 +11,13 @@ import {
 } from "react"
 import axios from "axios"
 import { localApi } from "@/lib/localApi"
+import { UserRole } from "@/lib/dashboard-menu"
 
 export type AuthUser = {
   id: string
   name: string
   email: string
-  roles: string[]
+  roles: UserRole[]
   permissions: string[]
 }
 

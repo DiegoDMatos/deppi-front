@@ -56,11 +56,13 @@ export const dashboardMenus = {
   ],
 } satisfies Record<UserRole, { label: string; href: string; icon: typeof LayoutDashboard; permissions?: Permission[] }[]>
 
-
 export function getDashboardMenu(
-  role: UserRole,
+  role: UserRole | undefined,
   permissions: string[],
 ) {
+
+  if(!role) return [];
+
   const menu = dashboardMenus[role] as {
     label: string
     href: string

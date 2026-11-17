@@ -1,4 +1,3 @@
-
 import type { Permission, UserRole } from "@/lib/dashboard-menu"
 
 type MockUser = {
@@ -9,10 +8,10 @@ type MockUser = {
   permissions: Permission[]
 }
 
-function getNameInitials(name: string){
+export function getNameInitials(name: string){
   if(!name) return "IF"
 
-  const initials = name.split(' ').map((n) => n[0]);
+  const initials = name.split(' ').map((n) => n[0].toUpperCase());
   return initials.length > 1 ? initials[0] + initials[1] : initials[0];
 }
 

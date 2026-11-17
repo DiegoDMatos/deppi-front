@@ -17,7 +17,7 @@ export async function GET(request: Request){
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log(userResponse);
+        
         return NextResponse.json(userResponse.data);
     } catch{
         return NextResponse.json({ status: 401 });

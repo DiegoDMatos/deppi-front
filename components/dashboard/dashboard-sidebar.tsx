@@ -1,4 +1,3 @@
-
 "use client"
 
 import Link from "next/link"
@@ -21,27 +20,16 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-const validRoles: UserRole[] = [
-  "ADMIN",
-  "DEPPI",
-  "PROFESSOR",
-  "ALUNO",
-]
+const validRoles: UserRole[] = ["ADMIN", "DEPPI", "PROFESSOR", "ALUNO"];
 
 export function DashboardSidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const router = useRouter()
   const { user, logout } = useAuth()
 
-  const role = validRoles.find(
-    (role) =>
-      pathname === `/${role.toLowerCase()}` ||
-      pathname.startsWith(`/${role.toLowerCase()}/`)
-  )
+  const role: UserRole | undefined = user?.roles.find((role) => validRoles.includes(role))
 
-  const hasRole = role && user?.roles.includes(role)
-
-  const menuItems = role && user && user.roles.includes(role)
+  const menuItems = role && user?.roles.includes(role)
   ? getDashboardMenu(role, user.permissions)
   : []
 
@@ -63,9 +51,6 @@ export function DashboardSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
-            Menu principal
-          </SidebarGroupLabel>
 
           <SidebarMenu>
             {menuItems.map((item) => {

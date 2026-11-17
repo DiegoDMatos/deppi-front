@@ -1,3 +1,5 @@
+"use client"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 import {
   SidebarProvider,
   SidebarInset,
@@ -15,14 +16,19 @@ import {
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { currentRole, mockUsers } from "@/lib/mock-user"
+import { useAuth } from "@/contexts/auth-context"
+import { getNameInitials } from "@/lib/mock-user"
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const user = mockUsers[currentRole]
+
+  const { user, loading } = useAuth()
+
+  if(loading) return (<p>carregando</p>)
+  if(!user) return (<p>erro</p>)
 
   return (
       <SidebarProvider>
@@ -43,7 +49,7 @@ export default function DashboardLayout({
                   {user.name}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {user.description}
+                  {user.roles[0]}
                 </p>
               </div>
 
@@ -54,7 +60,7 @@ export default function DashboardLayout({
                 >
                   <Avatar className="size-10 border border-[#D8E8DA]">
                     <AvatarFallback className="bg-[#EAF4EC] font-semibold text-[#14532D]">
-                      {user.initials}
+                      {getNameInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
