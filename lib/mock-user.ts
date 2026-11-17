@@ -8,13 +8,6 @@ type MockUser = {
   permissions: Permission[]
 }
 
-export function getNameInitials(name: string){
-  if(!name) return "IF"
-
-  const initials = name.split(' ').map((n) => n[0].toUpperCase());
-  return initials.length > 1 ? initials[0] + initials[1] : initials[0];
-}
-
 export const currentRole: UserRole = "ADMIN"
 
 export const mockUsers: Record<UserRole, MockUser> = {
@@ -42,7 +35,7 @@ export const mockUsers: Record<UserRole, MockUser> = {
   DEPPI: {
     name: "Equipe DEPPI",
     description: "Gestão de extensão",
-    initials: getNameInitials("Equipe DEPPI"),
+    initials: "DP",
     role: "DEPPI",
     permissions: [
       "enrollment.approve",

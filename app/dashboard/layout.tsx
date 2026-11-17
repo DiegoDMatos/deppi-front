@@ -17,7 +17,13 @@ import {
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAuth } from "@/contexts/auth-context"
-import { getNameInitials } from "@/lib/mock-user"
+
+function getNameInitials(name: string){
+  if(!name) return "IF"
+
+  const initials = name.split(' ').map((n) => n[0].toUpperCase());
+  return initials.length > 1 ? initials[0] + initials[1] : initials[0];
+}
 
 export default function DashboardLayout({
   children,
@@ -27,8 +33,8 @@ export default function DashboardLayout({
 
   const { user, loading } = useAuth()
 
-  if(loading) return (<p>carregando</p>)
-  if(!user) return (<p>erro</p>)
+  if(loading) return (<p>carregando</p>) // to do - tela de loading
+  if(!user) return (<p>erro</p>) // to do - tela de erro genérico
 
   return (
       <SidebarProvider>
