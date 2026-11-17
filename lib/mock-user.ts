@@ -16,7 +16,7 @@ function getNameInitials(name: string){
   return initials.length > 1 ? initials[0] + initials[1] : initials[0];
 }
 
-export const currentRole: UserRole = "DEPPI"
+export const currentRole: UserRole = "ADMIN"
 
 export const mockUsers: Record<UserRole, MockUser> = {
   ADMIN: {
