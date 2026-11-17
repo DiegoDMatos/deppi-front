@@ -1,5 +1,6 @@
-
 "use client"
+
+import { AuthGuard } from "@/components/auth-guard"
 
 import {
   Bar,
@@ -37,6 +38,14 @@ const indicators = [
 ]
 
 export default function AdminPage() {
+  return (
+    <AuthGuard allowedRoles={["ADMIN", "DEPPI"]}>
+      <DashboardContent />
+    </AuthGuard>
+  )
+}
+
+function DashboardContent() {
   const maxEnrollment = Math.max(
     ...enrollmentStatusData.map((item) => item.value),
   )
@@ -98,7 +107,11 @@ export default function AdminPage() {
                   <div
                     className="h-full rounded"
                     style={{
-                      width: `${(item.value / maxEnrollment) * 100}%`,
+                      width: `${
+                        maxEnrollment > 0
+                          ? (item.value / maxEnrollment) * 100
+                          : 0
+                      }%`,
                       backgroundColor: item.color,
                     }}
                   />

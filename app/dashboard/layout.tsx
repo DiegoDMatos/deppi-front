@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/sidebar"
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { AuthGuard } from "@/components/auth-guard"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { currentRole, mockUsers } from "@/lib/mock-user"
 
@@ -26,7 +25,6 @@ export default function DashboardLayout({
   const user = mockUsers[currentRole]
 
   return (
-    <AuthGuard allowedRoles={["ADMIN", "DEPPI"]}>
       <SidebarProvider>
         <DashboardSidebar />
 
@@ -88,6 +86,5 @@ export default function DashboardLayout({
           </main>
         </SidebarInset>
       </SidebarProvider>
-    </AuthGuard>
   )
 }
