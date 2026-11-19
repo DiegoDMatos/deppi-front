@@ -33,8 +33,8 @@ export default function DashboardLayout({
 
   const { user, loading } = useAuth()
 
-  if(loading) return (<p>carregando</p>) // to do - tela de loading
-  if(!user) return (<p>erro</p>) // to do - tela de erro genérico
+  if(loading) return (<p>Carregando</p>) // to do - tela de loading
+  if(!user) return (<p>Sessão encerrada. Redirecionando...</p>) // to do - tela de erro genérico
 
   return (
       <SidebarProvider>

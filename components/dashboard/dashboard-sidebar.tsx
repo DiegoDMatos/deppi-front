@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { LogOut } from "lucide-react"
 
 import { getDashboardMenu } from "@/lib/dashboard-menu"
-import type { UserRole } from "@/lib/dashboard-menu"
+import type { UserRole } from "@/lib/types/auth"
 import { useAuth } from "@/contexts/auth-context"
 
 import {

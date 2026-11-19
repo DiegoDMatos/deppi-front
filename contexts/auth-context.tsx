@@ -10,16 +10,10 @@ import {
   type ReactNode,
 } from "react"
 import axios from "axios"
-import { localApi } from "@/lib/localApi"
-import { UserRole } from "@/lib/dashboard-menu"
-
-export type AuthUser = {
-  id: string
-  name: string
-  email: string
-  roles: UserRole[]
-  permissions: string[]
-}
+import { UserRole } from "@/lib/types/auth"
+import { getUserData } from "@/app/actions"
+import { AuthUser } from "@/lib/types/auth"
+import { deleteToken } from "@/app/dashboard/actions"
 
 type AuthContextType = {
   user: AuthUser | null
@@ -50,16 +44,18 @@ export function AuthProvider({
   setError(false)
 
   try {
-    const response = await localApi.get<AuthUser>("/api/auth/me", {
-      headers: { "Cache-Control": "no-cache" },
-    })
+    const authenticatedUser = await getUserData();
+    console.log(authenticatedUser.name);
 
-    const authenticatedUser = response.data
+    /* const authenticatedUser = await localApi.get<AuthUser>("/api/auth/me", {
+      headers: { "Cache-Control": "no-cache" },
+    }) */
+
 
     if (
-      typeof authenticatedUser?.id !== "string" ||
-      typeof authenticatedUser?.name !== "string" ||
-      typeof authenticatedUser?.email !== "string" ||
+      typeof authenticatedUser.id !== "string" ||
+      typeof authenticatedUser.name !== "string" ||
+      typeof authenticatedUser.email !== "string" ||
       !Array.isArray(authenticatedUser.roles) ||
       !Array.isArray(authenticatedUser.permissions)
     ) {
@@ -71,6 +67,7 @@ export function AuthProvider({
     }
 
     setUser(authenticatedUser)
+    sessionStorage.setItem("auth_user", JSON.stringify(user));
     return true
   } catch (err) {
     if (currentRequest !== requestId.current) {
@@ -99,6 +96,7 @@ export function AuthProvider({
   }, [refreshUser])
 
   const logout = () => {
+    deleteToken()
     sessionStorage.removeItem("auth_user")
     setUser(null)
     setError(false)
