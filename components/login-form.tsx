@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import axios from "axios"
 import { cn } from "@/lib/utils"
-import { localApi } from "@/lib/localApi"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -20,14 +19,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-
-export type AuthUser = {
-  id: string
-  name: string
-  email: string
-  roles: string[]
-  permissions: string[]
-}
+import { getUserData, login } from "@/app/actions"
+import { AuthUser } from "@/lib/types/auth"
+import { useAuth } from "@/contexts/auth-context"
+import { refresh } from "next/cache"
 
 export function LoginForm({
   className,
@@ -38,6 +33,7 @@ export function LoginForm({
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const { refreshUser } = useAuth()
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -45,18 +41,15 @@ export function LoginForm({
     setIsLoading(true)
 
     try {
+      await login(email, password);
 
-      await localApi.post<string>("/api/auth/login", { email, password })
+      const refreshed = await refreshUser();
 
-      const userResponse = await localApi.get<AuthUser>("/api/auth/me");
-
-      if(!userResponse){
-        throw new Error("Erro na rota /auth/me");
+      if(!refreshed){
+        throw new Error("Não foi possível carregar os dados do usuário");
       }
-
-      const user = userResponse.data;
-      sessionStorage.setItem("auth_user", JSON.stringify(user));
-      router.push("/dashboard");
+      
+      router.push("/inicio");
 
     } catch (err) {
       sessionStorage.removeItem("auth_user")
@@ -146,7 +139,7 @@ export function LoginForm({
                 </Button>
 
                 <FieldDescription className="text-center">
-                  Não tem uma conta? <a href="/cadastro">Crie uma conta</a>
+                  Não tem uma conta? <a href="/cadastro">Realizar cadastro</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

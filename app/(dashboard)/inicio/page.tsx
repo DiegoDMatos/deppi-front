@@ -1,6 +1,7 @@
 "use client"
 
 import { AuthGuard } from "@/components/auth-guard"
+import { Can } from "@/components/Can"
 
 import {
   Bar,
@@ -52,19 +53,8 @@ function DashboardContent() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-[#14532D]">
-          Início
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Visão geral dos cursos de extensão do IFCE.
-        </p>
-        <p className="mt-1 text-xs text-amber-700">
-          Dados demonstrativos — não representam informações reais.
-        </p>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <Can permissions={["CREATE_USER"]}>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {indicators.map((item) => (
           <div
             key={item.title}
@@ -74,9 +64,10 @@ function DashboardContent() {
             <p className="mt-2 text-3xl font-bold text-[#14532D]">
               {item.value}
             </p>
-          </div>
-        ))}
-      </div>
+         </div>
+          ))}
+        </div>
+      </Can>
 
       <div className="grid gap-4 xl:grid-cols-[1.2fr_1fr]">
         <section className="min-w-0 rounded-xl border bg-white p-5 shadow-sm">

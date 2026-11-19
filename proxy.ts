@@ -2,23 +2,22 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function proxy(request: NextRequest){
-  const token = request.cookies.get("auth_token");
-  const tokenValue = token?.value;
+  const token = request.cookies.get("auth_token")?.value;
   const url = request.nextUrl.pathname;
 
-  if(!tokenValue && url !== "/"){
+  // to do validar token
+
+  if(!token && url !== "/"){
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-
-  if(tokenValue && url === "/"){
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if(token && url === "/"){
+    return NextResponse.redirect(new URL("/inicio", request.url));
   }
 
   return NextResponse.next();
-    
 }
 
 export const config = {
-  matcher: ['/', '/dashboard/:path*', ]
+  matcher: ['/', '/inicio:path*', '/cursos:path*']
 }

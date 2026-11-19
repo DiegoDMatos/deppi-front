@@ -3,10 +3,11 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
+import { UserRole } from "@/lib/types/auth"
 
 type AuthGuardProps = {
   children: React.ReactNode
-  allowedRoles?: string[]
+  allowedRoles?: UserRole[]
 }
 
 export function AuthGuard({

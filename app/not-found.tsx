@@ -46,7 +46,7 @@ export default function NotFoundPage() {
 
           <Button
             variant="outline"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/login")}
           >
             Ir para o login
           </Button>
