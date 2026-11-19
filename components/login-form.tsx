@@ -49,7 +49,7 @@ export function LoginForm({
         throw new Error("Não foi possível carregar os dados do usuário");
       }
       
-      router.push("/dashboard");
+      router.push("/inicio");
 
     } catch (err) {
       sessionStorage.removeItem("auth_user")

@@ -11,30 +11,30 @@ import { Permission, UserRole } from "./types/auth";
 
 export const dashboardMenus = {
   ADMIN: [
-    { label: "Início", href: "/admin", icon: LayoutDashboard },
-    { label: "Usuários", href: "/admin/usuarios", icon: Users, permissions: ["MANAGE_USERS", "CREATE_USER"] },
-    { label: "Cursos", href: "/admin/cursos", icon: BookOpen, permissions: ["VIEW_COURSES"] },
-    { label: "Professores", href: "/admin/professores", icon: GraduationCap, permissions: ["MANAGE_USERS"] },
-    { label: "Inscrições", href: "/admin/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT"] },
-    { label: "Permissões", href: "/admin/permissoes", icon: ShieldCheck, permissions: ["MANAGE_PERMISSIONS", "VIEW_PERMISSIONS"] },
-    { label: "Cargos", href: "/admin/cargos", icon: UserRound, permissions: ["MANAGE_ROLES"] },
+    { label: "Início", href: "/inicio", icon: LayoutDashboard },
+    { label: "Usuários", href: "/usuarios", icon: Users, permissions: ["MANAGE_USERS", "CREATE_USER"] },
+    { label: "Cursos", href: "/cursos", icon: BookOpen, permissions: ["VIEW_COURSES"] },
+    { label: "Professores", href: "/professores", icon: GraduationCap, permissions: ["MANAGE_USERS"] },
+    { label: "Inscrições", href: "/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT"] },
+    { label: "Permissões", href: "/permissoes", icon: ShieldCheck, permissions: ["MANAGE_PERMISSIONS", "VIEW_PERMISSIONS"] },
+    { label: "Cargos", href: "/cargos", icon: UserRound, permissions: ["MANAGE_ROLES"] },
   ],
   DEPPI: [
-    { label: "Início", href: "/deppi", icon: LayoutDashboard },
-    { label: "Cursos", href: "/deppi/cursos", icon: BookOpen, permissions: ["VIEW_COURSES", "CREATE_COURSES", "UPDATE_COURSES"] },
-    { label: "Inscrições", href: "/deppi/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT", "enrollment.approve", "enrollment.reject", "enrollment.cancel"] },
-    { label: "Cargos", href: "/deppi/cargos", icon: UserRound, permissions: ["DEPPI_ROLES"] },
+    { label: "Início", href: "/inicio", icon: LayoutDashboard },
+    { label: "Cursos", href: "/cursos", icon: BookOpen, permissions: ["VIEW_COURSES", "CREATE_COURSES", "UPDATE_COURSES"] },
+    { label: "Inscrições", href: "/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT", "enrollment.approve", "enrollment.reject", "enrollment.cancel"] },
+    { label: "Cargos", href: "/cargos", icon: UserRound, permissions: ["DEPPI_ROLES"] },
   ],
   PROFESSOR: [
-    { label: "Início", href: "/professor", icon: LayoutDashboard },
-    { label: "Cursos", href: "/professor/cursos", icon: BookOpen, permissions: ["CREATE_COURSES", "UPDATE_COURSES", "CLOSE_COURSE"] },
-    { label: "Inscrições", href: "/professor/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT"] },
+    { label: "Início", href: "/inicio", icon: LayoutDashboard },
+    { label: "Cursos", href: "/cursos", icon: BookOpen, permissions: ["CREATE_COURSES", "UPDATE_COURSES", "CLOSE_COURSE"] },
+    { label: "Inscrições", href: "/inscricoes", icon: ClipboardList, permissions: ["MANAGE_ENROLLMENT"] },
   ],
   ALUNO: [
-    { label: "Início", href: "/aluno", icon: LayoutDashboard },
-    { label: "Cursos disponíveis", href: "/aluno/cursos", icon: BookOpen },
-    { label: "Minhas inscrições", href: "/aluno/inscricoes", icon: ClipboardList },
-    { label: "Meu perfil", href: "/aluno/perfil", icon: UserRound },
+    { label: "Início", href: "/inicio", icon: LayoutDashboard },
+    { label: "Cursos disponíveis", href: "/cursos", icon: BookOpen },
+    { label: "Minhas inscrições", href: "/inscricoes", icon: ClipboardList },
+    { label: "Meu perfil", href: "/perfil", icon: UserRound },
   ],
 } satisfies Record<UserRole, { label: string; href: string; icon: typeof LayoutDashboard; permissions?: Permission[] }[]>
 

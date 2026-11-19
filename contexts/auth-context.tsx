@@ -13,7 +13,7 @@ import axios from "axios"
 import { UserRole } from "@/lib/types/auth"
 import { getUserData } from "@/app/actions"
 import { AuthUser } from "@/lib/types/auth"
-import { deleteToken } from "@/app/dashboard/actions"
+import { deleteToken } from "@/app/(dashboard)/actions"
 
 type AuthContextType = {
   user: AuthUser | null
@@ -45,12 +45,10 @@ export function AuthProvider({
 
   try {
     const authenticatedUser = await getUserData();
-    console.log(authenticatedUser.name);
 
     /* const authenticatedUser = await localApi.get<AuthUser>("/api/auth/me", {
       headers: { "Cache-Control": "no-cache" },
     }) */
-
 
     if (
       typeof authenticatedUser.id !== "string" ||

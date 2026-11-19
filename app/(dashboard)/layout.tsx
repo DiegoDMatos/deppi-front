@@ -17,6 +17,7 @@ import {
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAuth } from "@/contexts/auth-context"
+import { usePathname } from "next/navigation"
 
 function getNameInitials(name: string){
   if(!name) return "IF"
@@ -31,10 +32,11 @@ export default function DashboardLayout({
   children: React.ReactNode
 }>) {
 
-  const { user, loading } = useAuth()
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
 
-  if(loading) return (<p>Carregando</p>) // to do - tela de loading
-  if(!user) return (<p>Sessão encerrada. Redirecionando...</p>) // to do - tela de erro genérico
+  if(loading) return (<p>Carregando</p>);
+  if(!user) return (<p>Redirecionando...</p>);
 
   return (
       <SidebarProvider>
@@ -44,9 +46,9 @@ export default function DashboardLayout({
           <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-white px-4 lg:px-6">
 
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#14532D]">
-                Painel administrativo
-              </p>
+              <h1 className="text-2xl font-bold tracking-tight text-[#14532D]">
+                Início
+              </h1>
             </div>
 
             <div className="flex items-center gap-3">
