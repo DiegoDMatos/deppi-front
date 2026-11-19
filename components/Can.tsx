@@ -7,12 +7,15 @@ type CanProps = {
   children: ReactNode
 }
 
-export function Can({ permissions, children}: CanProps){
+function useCan(permissions: Permission[]){
     const { user } = useAuth();
     const userPermissions = user?.permissions;
-    const allowed = permissions.find((permission) =>
+    return permissions.find((permission) =>
         userPermissions?.includes(permission)
     )
+}
 
+export function Can({ permissions, children}: CanProps){
+    const allowed = useCan(permissions)
     return allowed ? <>{children}</> : null;
 }
