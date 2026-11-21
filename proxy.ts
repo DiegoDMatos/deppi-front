@@ -8,10 +8,10 @@ export async function proxy(request: NextRequest){
   // to do validar token
 
   if(!token && url !== "/"){
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if(token && url === "/"){
+  if(token && (url === "/" || url === "/login")){
     return NextResponse.redirect(new URL("/inicio", request.url));
   }
 
@@ -19,5 +19,7 @@ export async function proxy(request: NextRequest){
 }
 
 export const config = {
-  matcher: ['/', '/inicio:path*', '/cursos:path*']
+  matcher: ['/',
+    '/inicio:path*',
+    '/cursos:path*'],
 }

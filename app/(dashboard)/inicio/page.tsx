@@ -1,70 +1,63 @@
-"use client"
+"use client";
 
-import { AuthGuard } from "@/components/auth-guard"
-import { Can } from "@/components/Can"
+import { AuthGuard } from "@/components/auth-guard";
+import { Can } from "@/components/Can";
 
-import {
-  Bar,
-  BarChart,
-  Cell,
-  Pie,
-  PieChart,
-  XAxis,
-} from "recharts"
+import { Bar, BarChart, Cell, Pie, PieChart, XAxis } from "recharts";
 
 const enrollmentStatusData = [
   { status: "Pendente", value: 0, color: "#C8752B" },
   { status: "Deferida", value: 0, color: "#348D59" },
   { status: "Indeferida", value: 0, color: "#C83D3D" },
   { status: "Cancelada", value: 0, color: "#808080" },
-]
+];
 
 const courseStatusData = [
   { status: "Em análise", value: 5, color: "#B95A0A" },
   { status: "Em andamento", value: 10, color: "#16803D" },
   { status: "Concluído", value: 9, color: "#2455E8" },
   { status: "Fechado", value: 0, color: "#A0A0A0" },
-]
+];
 
 const totalCourses = courseStatusData.reduce(
   (total, item) => total + item.value,
   0,
-)
+);
 
 const indicators = [
   { title: "Usuários", value: "—" },
   { title: "Cursos", value: "—" },
   { title: "Professores", value: "—" },
   { title: "Inscrições", value: "—" },
-]
+];
 
 export default function AdminPage() {
   return (
     <AuthGuard allowedRoles={["ADMIN", "DEPPI"]}>
       <DashboardContent />
     </AuthGuard>
-  )
+  );
 }
 
 function DashboardContent() {
   const maxEnrollment = Math.max(
     ...enrollmentStatusData.map((item) => item.value),
-  )
+  );
 
   return (
     <div className="space-y-6">
       <Can permissions={["CREATE_USER"]}>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {indicators.map((item) => (
-          <div
-            key={item.title}
-            className="rounded-xl border bg-white p-5 shadow-sm"
-          >
-            <p className="text-sm text-muted-foreground">{item.title}</p>
-            <p className="mt-2 text-3xl font-bold text-[#14532D]">
-              {item.value}
-            </p>
-         </div>
+          {indicators.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-xl border bg-white p-5 shadow-sm"
+            >
+              <p className="text-sm text-muted-foreground">{item.title}</p>
+              <p className="mt-2 text-3xl font-bold text-[#14532D]">
+                {item.value}
+              </p>
+            </div>
           ))}
         </div>
       </Can>
@@ -166,5 +159,5 @@ function DashboardContent() {
         </section>
       </div>
     </div>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { LogOut } from "lucide-react"
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
-import { getDashboardMenu } from "@/lib/dashboard-menu"
-import type { UserRole } from "@/lib/types/auth"
-import { useAuth } from "@/contexts/auth-context"
+import { getDashboardMenu } from "@/lib/dashboard-menu";
+import type { UserRole } from "@/lib/types/auth";
+import { useAuth } from "@/contexts/auth-context";
 
 import {
   Sidebar,
@@ -18,54 +18,48 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const validRoles: UserRole[] = ["ADMIN", "DEPPI", "PROFESSOR", "ALUNO"];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const router = useRouter()
-  const { user, logout } = useAuth()
+  const router = useRouter();
+  const { user, logout } = useAuth();
 
-  const role: UserRole | undefined = user?.roles.find((role) => validRoles.includes(role))
+  const role: UserRole | undefined = user?.roles.find((role) =>
+    validRoles.includes(role),
+  );
 
-  const menuItems = role && user?.roles.includes(role)
-  ? getDashboardMenu(role, user.permissions)
-  : []
+  const menuItems =
+    role && user?.roles.includes(role)
+      ? getDashboardMenu(role, user.permissions)
+      : [];
 
   function handleLogout() {
-    logout()
-    router.replace("/")
+    logout();
+    router.replace("/");
   }
 
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-4 py-5">
-        <p className="text-xl font-bold text-[#14532D]">
-          DEPPI
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Gestão de extensão
-        </p>
+        <p className="text-xl font-bold text-[#14532D]">DEPPI</p>
+        <p className="text-xs text-muted-foreground">Gestão de extensão</p>
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-
           <SidebarMenu>
             {menuItems.map((item) => {
-              const Icon = item.icon
+              const Icon = item.icon;
 
               const isActive =
-                pathname === item.href ||
-                pathname.startsWith(`${item.href}/`)
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
 
               return (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    isActive={isActive}
-                    tooltip={item.label}
-                  >
+                  <SidebarMenuButton isActive={isActive} tooltip={item.label}>
                     <Link
                       href={item.href}
                       className="flex w-full items-center gap-2"
@@ -75,7 +69,7 @@ export function DashboardSidebar() {
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              )
+              );
             })}
           </SidebarMenu>
         </SidebarGroup>
@@ -92,5 +86,5 @@ export function DashboardSidebar() {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

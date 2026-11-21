@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { FileQuestion } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation";
+import { FileQuestion } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 export default function NotFoundPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8FAF8] px-4">
@@ -22,17 +22,13 @@ export default function NotFoundPage() {
             <FileQuestion className="size-8 text-[#15803D]" />
           </div>
 
-          <span className="text-5xl font-bold text-[#14532D]">
-            404
-          </span>
+          <span className="text-5xl font-bold text-[#14532D]">404</span>
 
-          <CardTitle className="text-2xl">
-            Página não encontrada
-          </CardTitle>
+          <CardTitle className="text-2xl">Página não encontrada</CardTitle>
 
           <CardDescription className="text-center">
-            A página que você está procurando não existe
-            ou pode ter sido removida.
+            A página que você está procurando não existe ou pode ter sido
+            removida.
           </CardDescription>
         </CardHeader>
 
@@ -44,14 +40,11 @@ export default function NotFoundPage() {
             Voltar à página anterior
           </Button>
 
-          <Button
-            variant="outline"
-            onClick={() => router.push("/login")}
-          >
+          <Button variant="outline" onClick={() => router.push("/login")}>
             Ir para o login
           </Button>
         </CardContent>
       </Card>
     </main>
-  )
+  );
 }

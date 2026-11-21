@@ -1,14 +1,15 @@
-import { LoginForm } from "@/components/login-form"
+import { LoginForm } from "@/components/login-form";
 
 export default function Page() {
   return (
-      <main className="grid min-h-svh gap-4 bg-[#F8FAF8] p-4 lg:grid-cols-2">      
-<section className="relative hidden overflow-hidden rounded-2xl bg-[#14532D] lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">        <div
+    <main className="grid min-h-svh gap-4 bg-[#F8FAF8] p-4 lg:grid-cols-2">
+      <section className="relative hidden overflow-hidden rounded-2xl bg-[#14532D] lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
+        {" "}
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/images/campus-cedro.jpg')" }}
         />
-
-<div className="absolute inset-0 bg-linear-to-br from-[#14532D]/70 via-[#14532D]/35 to-[#14532D]/10" />
+        <div className="absolute inset-0 bg-linear-to-br from-[#14532D]/70 via-[#14532D]/35 to-[#14532D]/10" />
         <div className="relative z-10">
           <p className="text-sm font-medium tracking-[0.2em] text-white/80">
             IFCE · CAMPUS CEDRO
@@ -21,7 +22,6 @@ export default function Page() {
             aproximando estudantes, professores e comunidade.
           </p>
         </div>
-
         <div className="relative z-10 border-t border-white/20 pt-6">
           <p className="text-sm text-white/75">
             DEPPI · Gestão de cursos de extensão
@@ -44,5 +44,5 @@ export default function Page() {
         </div>
       </section>
     </main>
-  )
+  );
 }

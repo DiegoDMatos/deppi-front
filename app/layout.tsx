@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Space_Grotesk,  Inter_Tight, JetBrains_Mono} from "next/font/google";
+import { Space_Grotesk, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/auth-context"
+import { AuthProvider } from "@/contexts/auth-context";
 
 const spaceGrotest = Space_Grotesk({
   subsets: ["latin"],
-  variable: '--font-space-grotesk'
+  variable: "--font-space-grotesk",
 });
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
-  variable: '--font-inter-tight'
+  variable: "--font-inter-tight",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: '--font-jetbrains-mono'
+  variable: "--font-jetbrains-mono",
 });
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
-        </body>
+      </body>
     </html>
   );
 }

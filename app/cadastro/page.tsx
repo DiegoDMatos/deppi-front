@@ -1,18 +1,14 @@
-"use client"
+"use client";
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   cadastroSchema,
   type CadastroFormData,
-} from "@/lib/validations/cadastro"
-import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/lib/validations/cadastro";
+import { Button } from "@/components/ui/button";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 export default function CadastroPage() {
   const {
@@ -27,7 +23,7 @@ export default function CadastroPage() {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
   function onSubmit() {}
 
@@ -92,9 +88,7 @@ export default function CadastroPage() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="confirmPassword">
-                Confirmar senha
-              </FieldLabel>
+              <FieldLabel htmlFor="confirmPassword">Confirmar senha</FieldLabel>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -118,5 +112,5 @@ export default function CadastroPage() {
         </form>
       </section>
     </main>
-  )
+  );
 }

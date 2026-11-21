@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   createContext,
@@ -8,97 +8,88 @@ import {
   useRef,
   useCallback,
   type ReactNode,
-} from "react"
-import axios from "axios"
-import { UserRole } from "@/lib/types/auth"
-import { getUserData } from "@/app/actions"
-import { AuthUser } from "@/lib/types/auth"
-import { deleteToken } from "@/app/(dashboard)/actions"
+} from "react";
+import axios from "axios";
+import { UserRole } from "@/lib/types/auth";
+import { getUserData } from "@/app/actions";
+import { AuthUser } from "@/lib/types/auth";
+import { deleteToken } from "@/app/(dashboard)/actions";
 
 type AuthContextType = {
-  user: AuthUser | null
-  loading: boolean
-  error: boolean
-  refreshUser: () => Promise<boolean>
-  logout: () => void
-}
+  user: AuthUser | null;
+  loading: boolean;
+  error: boolean;
+  refreshUser: () => Promise<boolean>;
+  logout: () => void;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({
-  children,
-}: {
-  children: ReactNode
-}) {
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const requestId = useRef(0)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const requestId = useRef(0);
 
   const refreshUser = useCallback(async (): Promise<boolean> => {
-  const currentRequest = ++requestId.current
+    const currentRequest = ++requestId.current;
 
-  setLoading(true)
-  setError(false)
+    setLoading(true);
+    setError(false);
 
-  try {
-    const authenticatedUser = await getUserData();
+    try {
+      const response = await getUserData();
 
-    /* const authenticatedUser = await localApi.get<AuthUser>("/api/auth/me", {
-      headers: { "Cache-Control": "no-cache" },
-    }) */
+      if (!response?.success) return false;
 
-    if (
-      typeof authenticatedUser.id !== "string" ||
-      typeof authenticatedUser.name !== "string" ||
-      typeof authenticatedUser.email !== "string" ||
-      !Array.isArray(authenticatedUser.roles) ||
-      !Array.isArray(authenticatedUser.permissions)
-    ) {
-      throw new Error("Resposta inválida da API")
+      const authenticatedUser = response?.data;
+
+      if (!authenticatedUser) return false;
+
+      if (
+        typeof authenticatedUser.id !== "string" ||
+        typeof authenticatedUser.name !== "string" ||
+        typeof authenticatedUser.email !== "string" ||
+        !Array.isArray(authenticatedUser.roles) ||
+        !Array.isArray(authenticatedUser.permissions)
+      ) {
+        throw new Error("Resposta inválida da API");
+      }
+
+      if (currentRequest !== requestId.current) {
+        return false;
+      }
+
+      const { email, name } = authenticatedUser;
+      sessionStorage.setItem("auth_user", JSON.stringify({ email, name }));
+
+      setUser(authenticatedUser);
+      return true;
+    } catch (err) {
+      if (currentRequest !== requestId.current) {
+        return false;
+      }
+
+      setUser(null);
+
+      return false;
+    } finally {
+      if (currentRequest === requestId.current) {
+        setLoading(false);
+      }
     }
-
-    if (currentRequest !== requestId.current) {
-      return false
-    }
-
-    setUser(authenticatedUser)
-    sessionStorage.setItem("auth_user", JSON.stringify(user));
-    return true
-  } catch (err) {
-    if (currentRequest !== requestId.current) {
-      return false
-    }
-
-    setUser(null)
-
-    if (
-      !axios.isAxiosError(err) ||
-      err.response?.status !== 401
-    ) {
-      setError(true)
-    }
-
-    return false
-  } finally {
-    if (currentRequest === requestId.current) {
-      setLoading(false)
-    }
-  }
-}, [])
+  }, []);
 
   useEffect(() => {
-    void refreshUser()
-  }, [refreshUser])
+    void refreshUser();
+  }, [refreshUser]);
 
   const logout = () => {
-    deleteToken()
-    sessionStorage.removeItem("auth_user")
-    setUser(null)
-    setError(false)
-  }
+    deleteToken();
+    sessionStorage.removeItem("auth_user");
+    setUser(null);
+    setError(false);
+  };
 
   return (
     <AuthContext.Provider
@@ -112,16 +103,14 @@ export function AuthProvider({
     >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth deve ser utilizado dentro de AuthProvider"
-    )
+    throw new Error("useAuth deve ser utilizado dentro de AuthProvider");
   }
 
   return context;

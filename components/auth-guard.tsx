@@ -1,48 +1,42 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/contexts/auth-context"
-import { UserRole } from "@/lib/types/auth"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
+import { UserRole } from "@/lib/types/auth";
 
 type AuthGuardProps = {
-  children: React.ReactNode
-  allowedRoles?: UserRole[]
-}
+  children: React.ReactNode;
+  allowedRoles?: UserRole[];
+};
 
-export function AuthGuard({
-  children,
-  allowedRoles,
-}: AuthGuardProps) {
-  const router = useRouter()
-  const { user, loading, error, refreshUser } = useAuth()
+export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
+  const router = useRouter();
+  const { user, loading, error, refreshUser } = useAuth();
 
   const hasPermission =
     !!user &&
-    (!allowedRoles ||
-      allowedRoles.some((role) =>
-        user.roles.includes(role)
-      ))
+    (!allowedRoles || allowedRoles.some((role) => user.roles.includes(role)));
 
   useEffect(() => {
-    if (loading || error) return
+    if (loading || error) return;
 
     if (!user) {
-      router.replace("/")
-      return
+      router.replace("/");
+      return;
     }
 
     if (!hasPermission) {
-      router.replace("/403")
+      router.replace("/403");
     }
-  }, [user, loading, error, hasPermission, router])
+  }, [user, loading, error, hasPermission, router]);
 
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         Verificando acesso...
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -58,12 +52,12 @@ export function AuthGuard({
           Tentar novamente
         </button>
       </div>
-    )
+    );
   }
 
   if (!hasPermission) {
-    return null
+    return null;
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }
